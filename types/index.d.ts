@@ -22,3 +22,9 @@ interface SignUpParams {
   email: string;
   password: string;
 }
+
+interface User {
+  name: string;
+  email: string;
+  id: string;
+}

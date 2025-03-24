@@ -15,7 +15,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { signIn, signUp } from "@/lib/actions/auth.action";
-import { sign } from "crypto";
+
 const authFormSchema = (type: FormType) => {
   return z.object({
     name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
