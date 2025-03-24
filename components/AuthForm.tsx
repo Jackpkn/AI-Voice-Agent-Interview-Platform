@@ -25,6 +25,7 @@ const authFormSchema = (type: FormType) => {
 };
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,15 +35,18 @@ const AuthForm = ({ type }: { type: FormType }) => {
       password: "",
     },
   });
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       if (type === "sign-up") {
         const { name, email, password } = data;
+
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
+
         const result = await signUp({
           uid: userCredential.user.uid,
           name: name!,
@@ -50,8 +54,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
           password,
         });
 
-        if (!result?.success) {
-          toast.error(result?.message);
+        if (!result.success) {
+          toast.error(result.message);
           return;
         }
 
@@ -59,19 +63,25 @@ const AuthForm = ({ type }: { type: FormType }) => {
         router.push("/sign-in");
       } else {
         const { email, password } = data;
+
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
+
         const idToken = await userCredential.user.getIdToken();
         if (!idToken) {
           toast.error("Sign in Failed. Please try again.");
           return;
         }
-        await signIn({ email, idToken });
 
-        toast.success("You have successfully sign in");
+        await signIn({
+          email,
+          idToken,
+        });
+
+        toast.success("Signed in successfully.");
         router.push("/");
       }
     } catch (error) {
@@ -79,6 +89,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       toast.error(`There was an error: ${error}`);
     }
   };
+
   const isSignIn = type === "sign-in";
   return (
     <div className="card-border lg:min-w-[560px]">
