@@ -37,3 +37,8 @@ interface AgentProps {
   type: "generate" | "interview";
   questions?: string[];
 }
+
+type Message =
+  | TranscriptMessage
+  | FunctionCallMessage
+  | FunctionCallResultMessage;
