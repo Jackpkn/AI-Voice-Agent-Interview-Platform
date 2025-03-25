@@ -18,7 +18,13 @@ interface SavedMessage {
   content: string;
 }
 
-const Agent = ({ userName, userId, type, questions }: AgentProps) => {
+const Agent = ({
+  userName,
+  userId,
+  type,
+  questions,
+  interviewId,
+}: AgentProps) => {
   const router = useRouter();
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
@@ -76,7 +82,21 @@ const Agent = ({ userName, userId, type, questions }: AgentProps) => {
     if (messages.length > 0) {
       setLastMessage(messages[messages.length - 1].content);
     }
+    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+      console.log("handleGenerateFeedback");
+      // TODO: 
+      const { success, id } = {
+        success: true,
+        id: "feed_back-id",
+      };
 
+      if (success && id) {
+        router.push(`/interview/${interviewId}/feedback`);
+      } else {
+        console.log("Error saving feedback");
+        router.push("/");
+      }
+    };
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
         router.push("/");

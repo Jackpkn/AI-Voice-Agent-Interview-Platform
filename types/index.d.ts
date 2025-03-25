@@ -59,3 +59,8 @@ interface Interview {
   type: string;
   finalized: boolean;
 }
+
+interface RouteParams {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+}
