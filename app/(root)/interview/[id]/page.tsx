@@ -6,7 +6,10 @@ import { getRandomInterviewCover } from "@/lib/utils";
 
 import { getCurrentUser } from "@/lib/actions/auth.action";
 import DisplayTechIcons from "@/components/DisplayTechIcons";
-import { getInterviewById } from "@/lib/actions/general.action";
+import {
+  getFeedbackByInterviewId,
+  getInterviewById,
+} from "@/lib/actions/general.action";
 
 const InterviewDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -15,6 +18,11 @@ const InterviewDetails = async ({ params }: RouteParams) => {
 
   const interview = await getInterviewById(id);
   if (!interview) redirect("/");
+
+  const feedback = await getFeedbackByInterviewId({
+    interviewId: id,
+    userId: user?.id!,
+  });
 
   return (
     <>
