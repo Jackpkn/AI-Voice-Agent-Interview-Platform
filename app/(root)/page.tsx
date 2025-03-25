@@ -2,32 +2,21 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import InterviewCard from "@/components/InterviewCard";
-function Home() {
-  const hasPastInterviews = 1;
-  const user = { id: "user123" };
-  const userInterviews = [
-    {
-      id: "1",
-      role: "Frontend Developer",
-      type: "Technical",
-      techstack: ["React", "JavaScript", "CSS"],
-      createdAt: "2025-03-20",
-    },
-    {
-      id: "2",
-      role: "Backend Developer",
-      type: "Behavioral",
-      techstack: ["Node.js", "Express", "MongoDB"],
-      createdAt: "2025-03-21",
-    },
-    {
-      id: "3",
-      role: "Full Stack Developer",
-      type: "System Design",
-      techstack: ["React", "Node.js", "AWS"],
-      createdAt: "2025-03-22",
-    },
-  ];
+import {
+  getCurrentUser,
+  getInterviewsByUserId,
+  getLatestInterviews,
+} from "@/lib/actions/auth.action";
+async function Home() {
+  const user = await getCurrentUser();
+
+  const [userInterviews, allInterview] = await Promise.all([
+    getInterviewsByUserId(user?.id!),
+    getLatestInterviews({ userId: user?.id! }),
+  ]);
+
+  const hasPastInterviews = userInterviews?.length! > 0;
+  const hasUpcomingInterviews = allInterview?.length! > 0;
   return (
     <>
       <section className="card-cta">
