@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import DisplayTechIcons from "./DisplayTechIcons";
-const InterviewCard = ({
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+const InterviewCard = async ({
   interviewId,
   userId,
   role,
@@ -13,7 +14,13 @@ const InterviewCard = ({
   createdAt,
 }: InterviewCardProps) => {
   const formattedDate = dayjs(createdAt || Date.now()).format("MMM D, YYYY");
-  const feedback = null;
+  const feedback =
+    userId && interviewId
+      ? await getFeedbackByInterviewId({
+          interviewId,
+          userId,
+        })
+      : null;
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const badgeColor =
     {
